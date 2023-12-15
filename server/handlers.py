@@ -4,8 +4,8 @@ import json
 from utils.csv_handler import read_csv, find_by_id, write_csv, update_csv
 
 
-class_file = '../data/class.csv'
-students_file = '../data/students.csv'
+class_file = "D:\Cours\Api-cours\data\class.csv"
+students_file = "D:\Cours\Api-cours\data\students.csv"
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -90,3 +90,35 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         else:
             self.respond(404, {'message': 'Not found'})
 
+    def do_DELETE(self):
+        path_parts = self.path.strip('/').split('/')
+
+        if path_parts[0] == 'class' and len(path_parts) == 2:
+            # Supprimer une classe dans class.csv
+            class_id = path_parts[1]
+            class_data = read_csv(class_file)
+            class_record = find_by_id(class_file, class_id)
+
+            if class_record:
+                class_data = [record for record in class_data if record['id'] != class_id]
+                write_csv(class_file, class_data, ['id', 'name', 'level'])
+                self.respond(200, {'message': 'Class deleted'})
+            else:
+                self.respond(404, {'message': 'Class not found'})
+
+        elif path_parts[0] == 'students' and len(path_parts) == 2:
+            # Supprimer un étudiant dans students.csv
+            student_id = path_parts[1]
+            student_data = read_csv(students_file)
+            student_record = find_by_id(students_file, student_id)
+
+            if student_record:
+                student_data = [record for record in student_data if record['id'] != student_id]
+                write_csv(students_file, student_data,
+                          ['id', 'lastname', 'firstname', 'email', 'phone', 'address', 'zip', 'city', 'class'])
+                self.respond(200, {'message': 'Student deleted'})
+            else:
+                self.respond(404, {'message': 'Student not found'})
+
+        else:
+            self.respond(404, {'message': 'Not found'})

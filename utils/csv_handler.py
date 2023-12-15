@@ -21,15 +21,22 @@ def find_by_id(file_path, record_id):
             return record
     return None
 
+
 def update_csv(file_path, record_id, updated_record):
     data = read_csv(file_path)
     updated = False
+
     for i, record in enumerate(data):
         if record['id'] == str(record_id):
-            data[i] = updated_record
+            # Mise à jour des champs spécifiés tout en conservant les autres champs, y compris l'ID
+            for key, value in updated_record.items():
+                if key in record:
+                    data[i][key] = value
             updated = True
             break
+
     if updated:
         fieldnames = data[0].keys()
         write_csv(file_path, data, fieldnames)
+
     return updated
