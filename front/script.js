@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchClasses();
     fetchStudents();
 });
@@ -53,9 +53,9 @@ function fetchStudents() {
 
 function deleteClass(classId) {
     console.log(classId);
-    fetch(`http://localhost:8000/class/${classId}`, { method: 'DELETE' })
+    fetch(`http://localhost:8000/class/${classId}`, {method: 'DELETE'})
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 fetchClasses();
             }
         });
@@ -63,9 +63,9 @@ function deleteClass(classId) {
 
 function deleteStudent(studentId) {
 
-    fetch(`http://localhost:8000/students/${studentId}`, { method: 'DELETE' })
+    fetch(`http://localhost:8000/students/${studentId}`, {method: 'DELETE'})
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 fetchStudents();
             }
         });
@@ -94,7 +94,7 @@ function openEditFormStudent(studentData) {
 }
 
 
-document.getElementById('formEditClass').addEventListener('submit', function(e) {
+document.getElementById('formEditClass').addEventListener('submit', function (e) {
     e.preventDefault();
     const classId = this.dataset.classId;
     const name = document.getElementById('editClassName').value;
@@ -102,8 +102,8 @@ document.getElementById('formEditClass').addEventListener('submit', function(e) 
 
     fetch(`http://localhost:8000/class/${classId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, level })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, level})
     }).then(response => {
         if (response.ok) {
             fetchClasses();
@@ -113,7 +113,7 @@ document.getElementById('formEditClass').addEventListener('submit', function(e) 
 });
 
 
-document.getElementById('formEditStudent').addEventListener('submit', function(e) {
+document.getElementById('formEditStudent').addEventListener('submit', function (e) {
     e.preventDefault();
     const studentId = this.dataset.studentId;
     const lastname = document.getElementById('editStudentLastname').value;
@@ -127,8 +127,8 @@ document.getElementById('formEditStudent').addEventListener('submit', function(e
 
     fetch(`http://localhost:8000/students/${studentId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lastname, firstname, email, phone, address, zip, city, classe })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({lastname, firstname, email, phone, address, zip, city, classe})
     }).then(response => {
         if (response.ok) {
             fetchStudents();
@@ -146,15 +146,15 @@ document.getElementById('formEditStudent').addEventListener('submit', function(e
 });
 
 
-document.getElementById('formAddClass').addEventListener('submit', function(e) {
+document.getElementById('formAddClass').addEventListener('submit', function (e) {
     e.preventDefault();
     const name = document.getElementById('addClassName').value;
     const level = document.getElementById('addClassLevel').value;
 
     fetch('http://localhost:8000/class', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, level })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, level})
     }).then(response => {
         if (response.ok) {
             fetchClasses();
@@ -164,7 +164,7 @@ document.getElementById('formAddClass').addEventListener('submit', function(e) {
     });
 });
 
-document.getElementById('formAddStudent').addEventListener('submit', function(e) {
+document.getElementById('formAddStudent').addEventListener('submit', function (e) {
     e.preventDefault();
     const lastname = document.getElementById('addStudentLastname').value;
     const firstname = document.getElementById('addStudentFirstname').value;
@@ -177,8 +177,8 @@ document.getElementById('formAddStudent').addEventListener('submit', function(e)
 
     fetch('http://localhost:8000/students', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lastname, firstname, email, phone, address, zip, city, class:classe })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({lastname, firstname, email, phone, address, zip, city, class: classe})
     }).then(response => {
         if (response.ok) {
             fetchStudents(); // Mettre à jour la liste des étudiants
@@ -186,3 +186,4 @@ document.getElementById('formAddStudent').addEventListener('submit', function(e)
         }
     });
 });
+

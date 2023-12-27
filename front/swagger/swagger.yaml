@@ -1,0 +1,154 @@
+openapi: 3.0.0
+info:
+  title: API Rest sans framework
+  description: |-
+    # 🚀 Get started here
+
+
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+components:
+  securitySchemes:
+    noauthAuth:
+      type: http
+      scheme: noauth
+tags:
+  - name: Class
+  - name: students
+paths:
+  /class:
+    get:
+      tags:
+        - Class
+      summary: Get
+      description: |-
+        This is a GET request and it is used to "get" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).
+
+        A successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Class
+      summary: Post
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: {
+                          "id": "123",
+                          "name": "Nouveau nom de la classe",
+                          "level": "Nouveau niveau"
+                        }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /class/:
+    delete:
+      tags:
+        - Class
+      summary: Delete
+      description: |-
+        This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).
+
+        A successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /class/2:
+    patch:
+      tags:
+        - Class
+      summary: PATCH
+      description: |-
+        This is a GET request and it is used to "get" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).
+
+        A successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Nouveau nom de la classe
+                level: Nouveau niveau
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /students:
+    post:
+      tags:
+        - students
+      summary: Post
+      description: |-
+        This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.
+
+        A successful POST request typically returns a `200 OK` or `201 Created` response code.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: '15'
+                lastname: Dupont
+                firstname: Marie
+                email: marie.dupont@example.com
+                phone: '0123456789'
+                address: 123 Rue de l'Exemple
+                zip: '75000'
+                city: Paris
+                class: '123'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - students
+      summary: Get
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /students/1:
+    patch:
+      tags:
+        - students
+      summary: Patch
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: {
+                          "email": "nouveau.email@example.com",
+                          "phone": "9876543210"
+                        }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - students
+      summary: Delet
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
