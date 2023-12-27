@@ -1,28 +1,17 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
 }
 
-h2 {
-    color: #333;
+h1 {
+    text-align: center;
 }
 
-#class-section, #student-section {
+div {
     margin: 20px;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ddd;
-    background-color: #fff;
 }
-.popup {
-    display: none;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #ccc;
-    background-color: white;
-    padding: 20px;
-    z-index: 1000;
+
+ul {
+    list-style-type: none;
 }

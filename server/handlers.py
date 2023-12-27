@@ -54,6 +54,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if path_parts[0] == 'class':
             # Ajouter une nouvelle classe dans class.csv
             new_data = read_csv(class_file)
+
+            new_id = 1
+            for row in new_data:
+                if int(row['id']) >= new_id:
+                    new_id = int(row['id']) + 1
+            post_data['id'] = str(new_id)
             new_data.append(post_data)
             write_csv(class_file, new_data, ['id', 'name', 'level'])
             self.respond(201, {'message': 'Class created'})

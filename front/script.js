@@ -5,119 +5,162 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function fetchClasses() {
     fetch('http://localhost:8000/class')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Réponse réseau non OK pour les classes');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(classes => {
-            const classTableBody = document.querySelector('#class-table tbody');
-            classTableBody.innerHTML = ''; // Effacer les anciennes données
+            const tbody = document.querySelector('#classTable tbody');
+            tbody.innerHTML = '';
             classes.forEach(classe => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
                     <td>${classe.id}</td>
                     <td>${classe.name}</td>
                     <td>${classe.level}</td>
                     <td>
-                        <button onclick="editClass('${classe.id}')">Modifier</button>
-                        <button onclick="deleteClass('${classe.id}')">Supprimer</button>
-                    </td>
-                `;
-                classTableBody.appendChild(row);
+                        <button class="btn btn-primary" onclick="openEditFormClass(${classe.id}, '${classe.name}', '${classe.level}')">Modifier</button>
+                        <button class="btn btn-danger" onclick="deleteClass(${classe.id})">Supprimer</button>
+                    </td>`;
+                tbody.appendChild(tr);
             });
-        })
-        .catch(error => console.error('Erreur lors de la récupération des classes:', error));
+        });
 }
+
 function fetchStudents() {
     fetch('http://localhost:8000/students')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Réponse réseau non OK pour les étudiants');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(students => {
-            const studentTableBody = document.querySelector('#student-table tbody');
-            studentTableBody.innerHTML = ''; // Effacer les anciennes données
+            const tbody = document.querySelector('#studentTable tbody');
+            tbody.innerHTML = '';
             students.forEach(student => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${student.firstname}</td>
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${student.id}</td>
                     <td>${student.lastname}</td>
+                    <td>${student.firstname}</td>
                     <td>${student.email}</td>
+                    <td>${student.phone}</td>
+                    <td>${student.address}</td>
+                    <td>${student.zip}</td>
+                    <td>${student.city}</td>
+                    <td>${student.class}</td>
                     <td>
-                        <button onclick="editStudent('${student.id}')">Modifier</button>
-                        <button onclick="deleteStudent('${student.id}')">Supprimer</button>
-                    </td>
-                    <!-- Ajoutez d'autres cellules ici si nécessaire -->
-                `;
-                studentTableBody.appendChild(row);
+                        <button class="btn btn-primary" onclick='openEditFormStudent(${JSON.stringify(JSON.stringify(student))})'>Modifier</button>
+                        <button class="btn btn-danger" onclick="deleteStudent(${student.id})">Supprimer</button>
+                    </td>`;
+                tbody.appendChild(tr);
             });
-        })
-        .catch(error => console.error('Erreur lors de la récupération des étudiants:', error));
-}
-function deleteStudent(studentId) {
-    fetch(`http://localhost:8000/students/${studentId}`, {
-        method: 'DELETE'
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Problème lors de la suppression de l’étudiant');
-            }
-            fetchStudents();
-        })
-        .catch(error => console.error('Erreur lors de la suppression:', error));
+        });
 }
 
 function deleteClass(classId) {
-    fetch(`http://localhost:8000/class/${classId}`, {
-        method: 'DELETE'
-    })
+    console.log(classId);
+    fetch(`http://localhost:8000/class/${classId}`, { method: 'DELETE' })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Problème lors de la suppression de l’étudiant');
+            if(response.ok) {
+                fetchClasses();
             }
-            fetchClasses()
-        })
-        .catch(error => console.error('Erreur lors de la suppression:', error));
+        });
 }
 
-function closePopup(popupId) {
-    document.getElementById(popupId).style.display = 'none';
+function deleteStudent(studentId) {
+
+    fetch(`http://localhost:8000/students/${studentId}`, { method: 'DELETE' })
+        .then(response => {
+            if(response.ok) {
+                fetchStudents();
+            }
+        });
 }
 
-// Ajoutez des écouteurs d'événements pour les soumissions de formulaire ici
-document.getElementById('edit-class-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    // Ici, code pour envoyer les données modifiées de la classe
+
+function openEditFormClass(id, name, level) {
+    document.getElementById('editClassName').value = name;
+    document.getElementById('editClassLevel').value = level;
+    document.getElementById('formEditClass').dataset.classId = id;
+    $('#editClassModal').modal('show');
+}
+
+function openEditFormStudent(studentData) {
+    const student = JSON.parse(studentData);
+    document.getElementById('editStudentLastname').value = student.lastname;
+    document.getElementById('editStudentFirstname').value = student.firstname;
+    document.getElementById('editStudentEmail').value = student.email;
+    document.getElementById('editStudentPhone').value = student.phone;
+    document.getElementById('editStudentAddress').value = student.address;
+    document.getElementById('editStudentZip').value = student.zip;
+    document.getElementById('editStudentCity').value = student.city;
+    document.getElementById('editStudentClass').value = student.class;
+    document.getElementById('formEditStudent').dataset.studentId = student.id;
+    $('#editStudentModal').modal('show');
+}
+
+
+document.getElementById('formEditClass').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const classId = this.dataset.classId;
+    const name = document.getElementById('editClassName').value;
+    const level = document.getElementById('editClassLevel').value;
+
+    fetch(`http://localhost:8000/class/${classId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, level })
+    }).then(response => {
+        if (response.ok) {
+            fetchClasses();
+            $('#editClassModal').modal('hide');
+        }
+    });
 });
 
-function editStudent(studentId) {
-    // Même processus que pour editClass
-    document.getElementById('edit-student-id').value = studentId;
-    document.getElementById('edit-student-firstname').value = 'Prénom';
-    document.getElementById('edit-student-lastname').value = 'Nom';
-    document.getElementById('edit-student-email').value = 'Email';
 
-    document.getElementById('edit-student-popup').style.display = 'block';
-}
+document.getElementById('formEditStudent').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const studentId = this.dataset.studentId;
+    const lastname = document.getElementById('editStudentLastname').value;
+    const firstname = document.getElementById('editStudentFirstname').value;
+    const email = document.getElementById('editStudentEmail').value;
+    const phone = document.getElementById('editStudentPhone').value;
+    const address = document.getElementById('editStudentAddress').value;
+    const zip = document.getElementById('editStudentZip').value;
+    const city = document.getElementById('editStudentCity').value;
+    const classe = document.getElementById('editStudentClass').value;
 
-function editClass(classId) {
-    // Ici, récupérez les informations de la classe à modifier
-    // Exemple : fetch(`http://localhost:8000/class/${classId}`)...
-
-    // Après avoir récupéré les données, remplissez le formulaire
-    document.getElementById('edit-class-id').value = classId;
-    document.getElementById('edit-class-name').value = 'Nom de la classe'; // à remplacer
-    document.getElementById('edit-class-level').value = 'Niveau de la classe'; // à remplacer
-
-    // Affichez la popup
-    document.getElementById('edit-class-popup').style.display = 'block';
-}
-
-    document.getElementById('edit-student-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Ici, code pour envoyer les données modifiées de l'étudiant
+    fetch(`http://localhost:8000/students/${studentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lastname, firstname, email, phone, address, zip, city, classe })
+    }).then(response => {
+        if (response.ok) {
+            fetchStudents();
+            $('#editStudentModal').modal('hide');
+        } else {
+            response.json().then(data => {
+                console.error('Erreur lors de la mise à jour de l\'étudiant:', data);
+                alert('Erreur lors de la mise à jour: ' + data.message); // Affiche un message d'erreur
+            });
+        }
+    }).catch(error => {
+        console.error('Erreur réseau:', error);
+        alert('Une erreur réseau est survenue'); // Gestion des erreurs réseau
     });
+});
+
+
+document.getElementById('formAddClass').addEventListener('submit', function(e) {
+    e.preventDefault();
+    console.log("hello");
+    const name = document.getElementById('addClassName').value;
+    const level = document.getElementById('addClassLevel').value;
+
+    fetch('http://localhost:8000/class', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, level })
+    }).then(response => {
+        if (response.ok) {
+            fetchClasses();
+            $('#addClassModal').modal('hide'); // Fermez le modal
+        }
+        console.log(response)
+    });
+});
