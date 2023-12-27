@@ -67,6 +67,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         elif path_parts[0] == 'students':
             # Ajouter un nouvel étudiant dans students.csv
             new_data = read_csv(students_file)
+
+            new_id = 1
+            for row in new_data:
+                # Vérifier si l'ID est non vide et numérique avant de convertir
+                if row['id'].isdigit() and int(row['id']) >= new_id:
+                    new_id = int(row['id']) + 1
+            post_data['id'] = str(new_id)
+
             new_data.append(post_data)
             write_csv(students_file, new_data,
                       ['id', 'lastname', 'firstname', 'email', 'phone', 'address', 'zip', 'city', 'class'])

@@ -148,7 +148,6 @@ document.getElementById('formEditStudent').addEventListener('submit', function(e
 
 document.getElementById('formAddClass').addEventListener('submit', function(e) {
     e.preventDefault();
-    console.log("hello");
     const name = document.getElementById('addClassName').value;
     const level = document.getElementById('addClassLevel').value;
 
@@ -162,5 +161,28 @@ document.getElementById('formAddClass').addEventListener('submit', function(e) {
             $('#addClassModal').modal('hide'); // Fermez le modal
         }
         console.log(response)
+    });
+});
+
+document.getElementById('formAddStudent').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const lastname = document.getElementById('addStudentLastname').value;
+    const firstname = document.getElementById('addStudentFirstname').value;
+    const email = document.getElementById('addStudentEmail').value;
+    const phone = document.getElementById('addStudentPhone').value;
+    const address = document.getElementById('addStudentAddress').value;
+    const zip = document.getElementById('addStudentZip').value;
+    const city = document.getElementById('addStudentCity').value;
+    const classe = document.getElementById('addStudentClass').value;
+
+    fetch('http://localhost:8000/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lastname, firstname, email, phone, address, zip, city, class:classe })
+    }).then(response => {
+        if (response.ok) {
+            fetchStudents(); // Mettre à jour la liste des étudiants
+            $('#addStudentModal').modal('hide'); // Fermer le modal
+        }
     });
 });

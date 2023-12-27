@@ -139,6 +139,57 @@
     </div>
 </div>
 
+<!-- Modal pour Ajouter un Étudiant -->
+<div id="addStudentModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter un Étudiant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAddStudent">
+                    <div class="form-group">
+                        <label for="addStudentLastname">Nom</label>
+                        <input type="text" class="form-control" id="addStudentLastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentFirstname">Prénom</label>
+                        <input type="text" class="form-control" id="addStudentFirstname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentEmail">Email</label>
+                        <input type="email" class="form-control" id="addStudentEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentPhone">Téléphone</label>
+                        <input type="tel" class="form-control" id="addStudentPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentAddress">Adresse</label>
+                        <input type="text" class="form-control" id="addStudentAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentZip">Code Postal</label>
+                        <input type="text" class="form-control" id="addStudentZip">
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentCity">Ville</label>
+                        <input type="text" class="form-control" id="addStudentCity">
+                    </div>
+                    <div class="form-group">
+                        <label for="addStudentClass">Classe</label>
+                        <input type="text" class="form-control" id="addStudentClass">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script src="script.js"></script>
